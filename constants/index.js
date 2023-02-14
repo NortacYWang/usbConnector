@@ -6,3 +6,5 @@ export const AppConstants = {
   TILES_FOLDER_SDCARD: `.${RNFS.ExternalStorageDirectoryPath}/Download/maptiles`,
   LIVE_MAP_URL: 'https://c.tile.openstreetmap.org',
 };
+
+export const Languages = ["english", "french", "spanish"]

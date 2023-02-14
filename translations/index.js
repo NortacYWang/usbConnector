@@ -1,8 +1,23 @@
 const Translations = {
+  english: {
+    english: 'English',
+    french: 'Anglais',
+    spanish: 'Inglés',
+  },
+  french: {
+    english: 'French',
+    french: 'Français',
+    spanish: 'Francés',
+  },
+  spanish: {
+    english: 'Spanish',
+    french: 'Espagnol',
+    spanish: 'Español',
+  },
   language: {
-    english: 'Hello',
-    french: 'Bonjour',
-    spanish: 'Hola',
+    english: 'Language',
+    french: 'Langue',
+    spanish: 'Idioma',
   },
   moduleName: {
     label1: {
