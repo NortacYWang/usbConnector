@@ -16,7 +16,7 @@ export default function Polygons() {
 
   const dispatch = useDispatch();
   return (
-    <View>
+    <>
       {DummyPolygon.map((polygon, index) => (
         <Polygon
           key={index}
@@ -32,7 +32,7 @@ export default function Polygons() {
           }}
         />
       ))}
-    </View>
+    </>
   );
 }
 

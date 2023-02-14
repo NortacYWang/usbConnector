@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import MapView from "react-native-map-clustering";
-
+import {Marker} from "react-native-maps";
 import {useSelector, useDispatch} from 'react-redux';
-
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import {setDescriptionInfo} from '@reducers/mapReducer';
 
-import Markers from './Markers';
+import { DummyMarkers } from './DummyData';
 import Polygons from './Polygons';
 
 const INITIALREGION = {
@@ -22,6 +22,8 @@ const Map = () => {
 
   const descriptionInfo = useSelector(state => state.map.descriptionInfo);
 
+  const myIcon = <Icon name="location-arrow" size={50} color="#900" />;
+
   return (
     <View style={styles.container}>
       <MapView
@@ -33,8 +35,19 @@ const Map = () => {
           e.stopPropagation();
           dispatch(setDescriptionInfo(''));
         }}>
-        {/*  display Markers */}
-        <Markers />
+
+        {/*  display Markers, KEEP THESE LINES inside MapView, otherwise the cluster will not work */}
+        {DummyMarkers.map(marker => (
+        <Marker
+          key={marker.title}
+          coordinate={marker.coordinate}
+          title={marker.title}
+          onPress={() => {
+            dispatch(setDescriptionInfo(marker.description));
+          }}>
+          {myIcon}
+        </Marker>
+      ))}
 
         {/* display Polygons */}
         <Polygons />
@@ -42,8 +55,8 @@ const Map = () => {
       {descriptionInfo.length > 0 && (
         <View
           style={{
-            width: 300,
-            height: 200,
+            width: 400,
+            height: 100,
             backgroundColor: 'rgba(0,0,0,0.5)',
             display: 'flex',
             justifyContent: 'center',
@@ -60,6 +73,7 @@ const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     flex: 1,
+    display: "flex",
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
