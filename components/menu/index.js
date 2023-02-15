@@ -1,14 +1,25 @@
 import React, {useState} from 'react';
 
 // External
-import {StyleSheet, View, Text, Dimensions, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Dimensions,
+  TouchableOpacity,
+  Button,
+} from 'react-native';
 import DropDown from 'react-native-paper-dropdown';
 import {TranslationConsumer, getTranslation} from 'react-native-translation';
 import {useSelector, useDispatch} from 'react-redux';
 
 // Internal
 import {setLanguage} from '@reducers/appReducer';
-import { finishDrawingPolygon, createHole } from '@reducers/polygonReducer';
+import {
+  finishDrawingPolygon,
+  createHole,
+  setIsDrawingPolygon,
+} from '@reducers/polygonReducer';
 import {Languages} from '@constants';
 
 var width = Dimensions.get('window').width; //full width
@@ -27,7 +38,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: "center",
+    justifyContent: 'center',
     gap: 8,
   },
   mapStyleButton: {
@@ -70,8 +81,8 @@ const Menu = () => {
   const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.app.language);
   const editPolygon = useSelector(state => state.polygon.editPolygon);
-  const creatingHole = useSelector(state => state.polygon.creatingHole)
-
+  const creatingHole = useSelector(state => state.polygon.creatingHole);
+  const isDrawingPolygon = useSelector(state => state.polygon.isDrawingPolygon);
 
   const [showDropDown, setShowDropDown] = useState(false);
 
@@ -90,7 +101,7 @@ const Menu = () => {
           return (
             <DropDown
               label={getTranslation('language')}
-            //   mode={'outlined'}
+              //   mode={'outlined'}
               visible={showDropDown}
               showDropDown={() => setShowDropDown(true)}
               onDismiss={() => setShowDropDown(false)}
@@ -105,15 +116,20 @@ const Menu = () => {
         }}
       </TranslationConsumer>
 
-
       <View style={styles.buttonContainer}>
+        {!isDrawingPolygon && (
+          <Button
+            onPress={() => dispatch(setIsDrawingPolygon(true))}
+            title="Draw Polygon"
+            color="#841584"
+          />
+        )}
+
         {editPolygon && (
           <TouchableOpacity
             onPress={() => dispatch(createHole())}
             style={[styles.bubble, styles.button]}>
-            <Text>
-              {creatingHole ? 'Finish Hole' : 'Create Hole'}
-            </Text>
+            <Text>{creatingHole ? 'Finish Hole' : 'Create Hole'}</Text>
           </TouchableOpacity>
         )}
         {editPolygon && (

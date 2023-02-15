@@ -31,6 +31,7 @@ const Map = () => {
   const descriptionInfo = useSelector(state => state.map.descriptionInfo);
   const editPolygon = useSelector(state => state.polygon.editPolygon);
   const creatingHole = useSelector(state => state.polygon.creatingHole);
+  const isDrawingPolygon = useSelector(state => state.polygon.isDrawingPolygon);
 
   const myIcon = <Icon name="location-arrow" size={50} color="#900" />;
 
@@ -40,36 +41,38 @@ const Map = () => {
   );
 
   const onMapPress = e => {
-    if (!editPolygon) {
-      const newPolygon = {
-        id: id++,
-        coordinates: [e.nativeEvent.coordinate],
-        name: "demo",
-        description: "demo Polygon",
-        holes: [],
-      };
+    if (isDrawingPolygon) {
+      if (!editPolygon) {
+        const newPolygon = {
+          id: id++,
+          coordinates: [e.nativeEvent.coordinate],
+          name: 'demo',
+          description: 'demo Polygon',
+          holes: [],
+        };
 
-      dispatch(setEditPolygon(newPolygon));
-    } else if (!creatingHole) {
-      const newPolygon = {
-        ...editPolygon,
-        coordinates: [...editPolygon.coordinates, e.nativeEvent.coordinate],
-      };
-      dispatch(setEditPolygon(newPolygon));
-    } else {
-      const holes = [...editPolygon.holes];
-      holes[holes.length - 1] = [
-        ...holes[holes.length - 1],
-        e.nativeEvent.coordinate,
-      ];
+        dispatch(setEditPolygon(newPolygon));
+      } else if (!creatingHole) {
+        const newPolygon = {
+          ...editPolygon,
+          coordinates: [...editPolygon.coordinates, e.nativeEvent.coordinate],
+        };
+        dispatch(setEditPolygon(newPolygon));
+      } else {
+        const holes = [...editPolygon.holes];
+        holes[holes.length - 1] = [
+          ...holes[holes.length - 1],
+          e.nativeEvent.coordinate,
+        ];
 
-      const newPolygon = {
-        ...editPolygon,
-        id: id++, // keep incrementing id to trigger display refresh
-        coordinates: [...editPolygon.coordinates],
-        holes,
-      };
-      dispatch(setEditPolygon(newPolygon));
+        const newPolygon = {
+          ...editPolygon,
+          id: id++, // keep incrementing id to trigger display refresh
+          coordinates: [...editPolygon.coordinates],
+          holes,
+        };
+        dispatch(setEditPolygon(newPolygon));
+      }
     }
   };
 
@@ -92,12 +95,11 @@ const Map = () => {
         onPress={e => {
           e.stopPropagation();
           dispatch(setDescriptionInfo(''));
-          onMapPress(e)
+          onMapPress(e);
         }}
         ref={mapRef}
         onMapReady={handleMapReady}
-        {...mapOptions}
-        >
+        {...mapOptions}>
         {/*  display Markers, KEEP THESE LINES inside MapView, otherwise the cluster will not work */}
         {DummyMarkers.map(marker => (
           <Marker

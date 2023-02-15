@@ -7,6 +7,7 @@ const polygonSlice = createSlice({
     polygons: [...DummyPolygon],
     editPolygon: null,
     creatingHole: false,
+    isDrawingPolygon: false,
   },
   reducers: {
     finishDrawingPolygon(state, action) {
@@ -40,9 +41,13 @@ const polygonSlice = createSlice({
       state.editPolygon = action.payload;
       state.polygons = [...state.polygons, action.payload];
     },
+
+    setIsDrawingPolygon(state, action) {
+        state.isDrawingPolygon = action.payload;
+    }
   },
 });
 
-export const {setEditPolygon, finishDrawingPolygon, createHole} = polygonSlice.actions;
+export const {setEditPolygon, finishDrawingPolygon, createHole, setIsDrawingPolygon} = polygonSlice.actions;
 
 export default polygonSlice.reducer;
