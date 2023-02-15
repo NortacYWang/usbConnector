@@ -1,46 +1,48 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {DummyPolygon} from '../components/map/DummyData';
 
-const initialPolygon = {
-  coordinate: [],
-  distance: 0,
-  lastLatLng: undefined,
-  initialLatLng: undefined,
-  centerLatLng: undefined,
-};
-
 const polygonSlice = createSlice({
   name: 'polygon',
   initialState: {
     polygons: [...DummyPolygon],
-    isEditingPolygon: false,
-    editPolygon: initialPolygon,
-    points: [],
+    editPolygon: null,
+    creatingHole: false,
   },
   reducers: {
     finishDrawingPolygon(state, action) {
-      state.polygons = [...state.polygons, state.editPolygon];
-      state.isEditingPolygon = false;
-      state.editPolygon = initialPolygon;
-      state.points = [];
+        state.polygons = [...state.polygons, state.editPolygon];
+        state.editPolygon = null;
+        state.creatingHole = false;
     },
 
-    setPolygonPoints(state, action) {
-      state.points = action.payload;
+    createHole(state, action) {
+      const {editPolygon, creatingHole} = state;
+      if (!creatingHole) {
+        state.creatingHole = true;
+        state.editPolygon = {
+          ...editPolygon,
+          holes: [...editPolygon.holes, []],
+        };
+      } else {
+        const holes = [...editPolygon.holes];
+        if (holes[holes.length - 1].length === 0) {
+          holes.pop();
+          state.editPolygon = {
+            ...editPolygon,
+            holes,
+          };
+        }
+      }
+      state.creatingHole = false;
     },
 
-    setIsPolygonEditing(state, action) {
-      state.isEditingPolygon = action.payload;
-    },
-
-    resetPolygonEditing(state, action) {
-      state.editPolygon = initialPolygon;
-      state.points = [];
+    setEditPolygon(state, action) {
+      state.editPolygon = action.payload;
+      state.polygons = [...state.polygons, action.payload];
     },
   },
 });
 
-export const {setIsPolygonEditing, finishDrawingPolygon, setPolygonPoints, resetPolygonEditing} =
-  polygonSlice.actions;
+export const {setEditPolygon, finishDrawingPolygon, createHole} = polygonSlice.actions;
 
 export default polygonSlice.reducer;

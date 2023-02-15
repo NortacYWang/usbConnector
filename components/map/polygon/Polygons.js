@@ -22,13 +22,14 @@ export default function Polygons() {
       {polygons.map((polygon, index) => (
         <Polygon
           key={index}
-          coordinates={polygon.coordinate}
+          coordinates={polygon.coordinates}
           strokeColor="#000"
           fillColor="rgba(255,0,0,0.5)"
           strokeWidth={1}
           zIndex={11}
           tappable={true}
           name={polygon.name}
+          holes={polygon.holes || []}
           onPress={data => {
             dispatch(setDescriptionInfo(polygon.description))
           }}

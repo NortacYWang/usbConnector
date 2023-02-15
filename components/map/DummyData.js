@@ -3,7 +3,8 @@ export const DummyPolygon = [
     id: 0,
     name: "poly1",
     description: "this is poly 1",
-    coordinate:   [
+    holes: [],
+    coordinates:   [
       {
         latitude: 37.8025259,
         longitude: -122.4351431,

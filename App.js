@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux';
 
 import Map from '@components/map';
 import Menu from '@components/menu';
+
+import PolygonDraw from './components/map/polygon/PolygonDraw';
 import Translations from './translations';
 
 
@@ -21,6 +23,7 @@ const App = () => {
           <Menu />
         </ScrollView>
       </SafeAreaView>
+      {/* <PolygonDraw /> */}
     </LanguageProvider>
   );
 };
