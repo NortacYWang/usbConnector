@@ -1,5 +1,6 @@
 export const DummyPolygon = [
   {
+    id: 0,
     name: "poly1",
     description: "this is poly 1",
     coordinate:   [
