@@ -8,3 +8,9 @@ export const AppConstants = {
 };
 
 export const Languages = ["english", "french", "spanish"]
+
+export const LanguagesDisplay = {
+  "english": "English",
+  "french": "Français",
+  "spanish": "Español",
+}

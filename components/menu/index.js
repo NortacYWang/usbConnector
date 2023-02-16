@@ -18,7 +18,7 @@ import {
   finishDrawingPolygon,
   setIsDrawingPolygon,
 } from '@reducers/polygonReducer';
-import {Languages} from '@constants';
+import {Languages, LanguagesDisplay} from '@constants';
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -84,7 +84,7 @@ const Menu = () => {
   const [showDropDown, setShowDropDown] = useState(false);
 
   const lanagugeList = Languages.map(language => ({
-    label: getTranslation(language),
+    label: LanguagesDisplay[language],
     value: language,
   }));
 

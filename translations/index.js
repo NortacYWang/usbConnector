@@ -1,19 +1,4 @@
 const Translations = {
-  english: {
-    english: 'English',
-    french: 'English',
-    spanish: 'English',
-  },
-  french: {
-    english: 'Français',
-    french: 'Français',
-    spanish: 'Français',
-  },
-  spanish: {
-    english: 'Español',
-    french: 'Español',
-    spanish: 'Español',
-  },
   language: {
     english: 'Language',
     french: 'Langue',
