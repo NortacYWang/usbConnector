@@ -1,23 +1,33 @@
 const Translations = {
   english: {
     english: 'English',
-    french: 'Anglais',
-    spanish: 'Inglés',
+    french: 'English',
+    spanish: 'English',
   },
   french: {
-    english: 'French',
+    english: 'Français',
     french: 'Français',
-    spanish: 'Francés',
+    spanish: 'Français',
   },
   spanish: {
-    english: 'Spanish',
-    french: 'Espagnol',
+    english: 'Español',
+    french: 'Español',
     spanish: 'Español',
   },
   language: {
     english: 'Language',
     french: 'Langue',
     spanish: 'Idioma',
+  },
+  draw_polygon: {
+    english: 'Draw Polygon',
+    french: 'Dessiner un polygone',
+    spanish: 'dibujar polígono',
+  },
+  finish: {
+    english: 'Finish',
+    french: 'Finir',
+    spanish: 'Finalizar',
   },
   moduleName: {
     label1: {

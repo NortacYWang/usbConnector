@@ -6,18 +6,16 @@ import {
   View,
   Text,
   Dimensions,
-  TouchableOpacity,
-  Button,
 } from 'react-native';
 import DropDown from 'react-native-paper-dropdown';
 import {TranslationConsumer, getTranslation} from 'react-native-translation';
 import {useSelector, useDispatch} from 'react-redux';
+import {Button} from 'react-native-paper';
 
 // Internal
 import {setLanguage} from '@reducers/appReducer';
 import {
   finishDrawingPolygon,
-  createHole,
   setIsDrawingPolygon,
 } from '@reducers/polygonReducer';
 import {Languages} from '@constants';
@@ -81,7 +79,6 @@ const Menu = () => {
   const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.app.language);
   const editPolygon = useSelector(state => state.polygon.editPolygon);
-  const creatingHole = useSelector(state => state.polygon.creatingHole);
   const isDrawingPolygon = useSelector(state => state.polygon.isDrawingPolygon);
 
   const [showDropDown, setShowDropDown] = useState(false);
@@ -120,24 +117,17 @@ const Menu = () => {
         {!isDrawingPolygon && (
           <Button
             onPress={() => dispatch(setIsDrawingPolygon(true))}
-            title="Draw Polygon"
-            color="#841584"
-          />
+            mode="contained">
+            {getTranslation('draw_polygon')}
+          </Button>
         )}
 
         {editPolygon && (
-          <TouchableOpacity
-            onPress={() => dispatch(createHole())}
-            style={[styles.bubble, styles.button]}>
-            <Text>{creatingHole ? 'Finish Hole' : 'Create Hole'}</Text>
-          </TouchableOpacity>
-        )}
-        {editPolygon && (
-          <TouchableOpacity
+          <Button
             onPress={() => dispatch(finishDrawingPolygon())}
-            style={[styles.bubble, styles.button]}>
-            <Text>Finish</Text>
-          </TouchableOpacity>
+            mode="contained">
+            {getTranslation('finish')}
+          </Button>
         )}
       </View>
     </View>

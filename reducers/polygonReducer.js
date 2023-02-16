@@ -14,6 +14,7 @@ const polygonSlice = createSlice({
         state.polygons = [...state.polygons, state.editPolygon];
         state.editPolygon = null;
         state.creatingHole = false;
+        state.isDrawingPolygon = false;
     },
 
     createHole(state, action) {
