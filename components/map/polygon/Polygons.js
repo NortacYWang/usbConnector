@@ -6,27 +6,30 @@ import {
 import {
   Polygon,
 } from 'react-native-maps';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {setDescriptionInfo} from '@reducers/mapReducer';
 
-import {DummyPolygon} from './DummyData';
 
 export default function Polygons() {
 
   const dispatch = useDispatch();
+
+  const polygons = useSelector(state => state.polygon.polygons)
+
   return (
     <>
-      {DummyPolygon.map((polygon, index) => (
+      {polygons.map((polygon, index) => (
         <Polygon
           key={index}
-          coordinates={polygon.coordinate}
+          coordinates={polygon.coordinates}
           strokeColor="#000"
           fillColor="rgba(255,0,0,0.5)"
           strokeWidth={1}
           zIndex={11}
           tappable={true}
           name={polygon.name}
+          holes={polygon.holes || []}
           onPress={data => {
             dispatch(setDescriptionInfo(polygon.description))
           }}

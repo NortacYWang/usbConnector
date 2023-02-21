@@ -1,14 +1,24 @@
 import React, {useState} from 'react';
 
 // External
-import {StyleSheet, View, Text, Dimensions} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Dimensions,
+} from 'react-native';
 import DropDown from 'react-native-paper-dropdown';
 import {TranslationConsumer, getTranslation} from 'react-native-translation';
 import {useSelector, useDispatch} from 'react-redux';
+import {Button} from 'react-native-paper';
 
 // Internal
 import {setLanguage} from '@reducers/appReducer';
-import {Languages} from '@constants';
+import {
+  finishDrawingPolygon,
+  setIsDrawingPolygon,
+} from '@reducers/polygonReducer';
+import {Languages, LanguagesDisplay} from '@constants';
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -26,7 +36,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: "center",
+    justifyContent: 'center',
     gap: 8,
   },
   mapStyleButton: {
@@ -41,16 +51,40 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 25,
   },
+
+  bubble: {
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 20,
+  },
+  latlng: {
+    width: 200,
+    alignItems: 'stretch',
+  },
+  button: {
+    width: 80,
+    paddingHorizontal: 12,
+    alignItems: 'center',
+    marginHorizontal: 10,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    marginVertical: 20,
+    backgroundColor: 'transparent',
+  },
 });
 
 const Menu = () => {
   const dispatch = useDispatch();
   const currentLanguage = useSelector(state => state.app.language);
+  const editPolygon = useSelector(state => state.polygon.editPolygon);
+  const isDrawingPolygon = useSelector(state => state.polygon.isDrawingPolygon);
 
   const [showDropDown, setShowDropDown] = useState(false);
 
   const lanagugeList = Languages.map(language => ({
-    label: getTranslation(language),
+    label: LanguagesDisplay[language],
     value: language,
   }));
 
@@ -64,7 +98,7 @@ const Menu = () => {
           return (
             <DropDown
               label={getTranslation('language')}
-            //   mode={'outlined'}
+              //   mode={'outlined'}
               visible={showDropDown}
               showDropDown={() => setShowDropDown(true)}
               onDismiss={() => setShowDropDown(false)}
@@ -78,6 +112,24 @@ const Menu = () => {
           );
         }}
       </TranslationConsumer>
+
+      <View style={styles.buttonContainer}>
+        {!isDrawingPolygon && (
+          <Button
+            onPress={() => dispatch(setIsDrawingPolygon(true))}
+            mode="contained">
+            {getTranslation('draw_polygon')}
+          </Button>
+        )}
+
+        {editPolygon && (
+          <Button
+            onPress={() => dispatch(finishDrawingPolygon())}
+            mode="contained">
+            {getTranslation('finish')}
+          </Button>
+        )}
+      </View>
     </View>
   );
 };

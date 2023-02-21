@@ -3,7 +3,6 @@ import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
 import {LanguageProvider} from 'react-native-translation';
 import { useSelector } from 'react-redux';
 
-
 import Map from '@components/map';
 import Menu from '@components/menu';
 import Translations from './translations';
