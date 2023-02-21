@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class SerialPortModulePackage implements ReactPackage {
-    // 将模块对象拿出来作为类属性，是为了在外部可以获取到，因为在监听设备插入/拔出的广播时还需要用到模块的实例
     private SerialPortModule serialPortModule;
 
     @NonNull
