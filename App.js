@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import Map from '@components/map';
 import Menu from '@components/menu';
 import Translations from './translations';
+import SerialDataReader from './SerialDataReader';
 
 
 const App = () => {
@@ -18,6 +19,7 @@ const App = () => {
         <ScrollView contentContainerStyle={styles.container}>
           <Map />
           <Menu />
+          <SerialDataReader />
         </ScrollView>
       </SafeAreaView>
     </LanguageProvider>

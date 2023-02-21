@@ -1,16 +1,25 @@
 package com.nortactactical;
 
 import android.app.Application;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.hardware.usb.UsbManager;
+import android.os.Bundle;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
 import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
+
+  private final SerialPortModulePackage serialPortModulePackage = new SerialPortModulePackage();
 
   private final ReactNativeHost mReactNativeHost =
       new DefaultReactNativeHost(this) {
@@ -25,6 +34,7 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
+          packages.add(serialPortModulePackage);
           return packages;
         }
 
@@ -58,5 +68,40 @@ public class MainApplication extends Application implements ReactApplication {
       DefaultNewArchitectureEntryPoint.load();
     }
     ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
-  }
+     // 定义广播监听
+    BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ReactNativeHost reactNativeHost = getReactNativeHost();
+            ReactContext reactContext = reactNativeHost.getReactInstanceManager().getCurrentReactContext();
+            if (reactContext == null) {
+                // 这里一定要判空
+                return;
+            }
+            SerialPortModule serialPortModule = serialPortModulePackage.getSerialPortModule();
+            if (serialPortModule == null) {
+                return;
+            }
+            if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(intent.getAction())) {
+                // usb设备插入,若此时有了串口设备,说明插入的是串口模块,向RN层发送事件
+                if (serialPortModule.hasSerialDevice()) {
+                    EventUtil.sendSerialActionEvent(reactContext, SerialActionConstants.ATTACHED);
+                }
+            } else if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(intent.getAction())) {
+                // usb设备拔出,将串口设备关闭一下,向RN层发送事件
+                if (serialPortModule.isSerialDeviceConnected()) {
+                    serialPortModule.close();
+                }
+                EventUtil.sendSerialActionEvent(reactContext, SerialActionConstants.DETACHED);
+            }
+        }
+    };
+
+    // 注册广播
+    IntentFilter filter = new IntentFilter();
+    filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+    filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
+    registerReceiver(receiver, filter);
+
+}
 }

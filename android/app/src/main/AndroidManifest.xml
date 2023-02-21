@@ -18,11 +18,16 @@
         android:exported="true">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
+            <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
       <meta-data
         android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyDQkJzNw_Qr4MQO4BI7GxQxkz4DtcNrGuU" />
+        android:value="AIzaSyDQkJzNw_Qr4MQO4BI7GxQxkz4DtcNrGuU" 
+        />
+         <meta-data
+         android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+         android:resource="@xml/device_filter" />
     </application>
 </manifest>
