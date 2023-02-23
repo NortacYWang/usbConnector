@@ -81,9 +81,13 @@ public class MainApplication extends Application implements ReactApplication {
             if (serialPortModule == null) {
                 return;
             }
+
+            // if(usbManager.ACTION_USB_PERMISSION)
+
             if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(intent.getAction())) {
                
                 if (serialPortModule.hasSerialDevice()) {
+                    serialPortModule.requestPermission();
                     EventUtil.sendSerialActionEvent(reactContext, SerialActionConstants.ATTACHED);
 
                 }

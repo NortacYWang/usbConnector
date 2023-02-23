@@ -17,6 +17,7 @@ export default class SerialPortModule  {
     }
 
     async sendAndReceive(hexData) {
+        console.log("senddata", hexData);
         return serialNativeModule.sendAndReceive(hexData);
     }
 

@@ -54,9 +54,9 @@ public class SerialPortModule extends ReactContextBaseJavaModule {
         }
         UsbDeviceConnection connection = usbManager.openDevice(firstDriver.getDevice());
         if (connection == null) {
-            promise.resolve(SerialResponseCodeConstant.CONNECT_FAILED);
              PendingIntent mPendingIntent = PendingIntent.getBroadcast(getReactApplicationContext(), 0, new Intent(ACTION_USB_PERMISSION), 0);
              usbManager.requestPermission(firstDriver.getDevice(), mPendingIntent);
+             promise.resolve(SerialResponseCodeConstant.CONNECT_FAILED);
             return;
         }
         this.usbSerialPort = firstDriver.getPorts().get(0);
@@ -107,12 +107,18 @@ public class SerialPortModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void hasDevice(Promise promise) {
-        // promise.resolve(hasSerialDevice());
-        promise.resolve(getFirstSerialDevice().getDevice().toString());
+        promise.resolve(hasSerialDevice());
+        // promise.resolve(getFirstSerialDevice().getDevice().toString());
     }
 
     public boolean hasSerialDevice() {
         return getFirstSerialDevice() != null;
+    }
+
+    public void requestPermission() {
+        UsbManager usbManager = getUsbManager();
+        PendingIntent mPendingIntent = PendingIntent.getBroadcast(getReactApplicationContext(), 0, new Intent(ACTION_USB_PERMISSION), 0);
+        usbManager.requestPermission(getFirstSerialDevice().getDevice(), mPendingIntent);
     }
 
     private UsbSerialDriver getFirstSerialDevice() {
@@ -150,6 +156,7 @@ public class SerialPortModule extends ReactContextBaseJavaModule {
             promise.resolve(SerialResponseCodeConstant.WRITE_FAILED);
             return;
         }
+
         
         new CountDownTimer(READ_DELAY_MILLS, 100) {
             final StringBuilder hex = new StringBuilder();

@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text} from 'react-native';
-import {DeviceEventEmitter, PermissionsAndroid} from 'react-native';
+import {DeviceEventEmitter} from 'react-native';
 import SerialPortModule from './native_modules/SerialPortModule';
 
 const serialPortModule = SerialPortModule.getInstance();
 
 export default function SerialDataReader() {
-  const [baudRate, dataBits, stopBits, parity] = [9600, 8, 1, 0];
+  const [baudRate, dataBits, stopBits, parity] = [115200, 8, 1, 0];
   const [data, setData] = useState('');
 
   const sendAndReadData = async () => {
-    return serialPortModule.sendAndReceive('3');
+    return serialPortModule.sendAndReceive('AT+CSQ');
   };
 
 
@@ -21,8 +21,11 @@ export default function SerialDataReader() {
       .connect(baudRate, dataBits, stopBits, parity)
       .then(async connected => {
         console.log('connected', connected);
-        if (connected) {
-          const result = sendAndReadData();
+        if (connected === "0000") {
+          const result = await sendAndReadData();
+
+          console.log('result', result);
+
           setData(__ => result);
         }
       });
@@ -49,8 +52,6 @@ export default function SerialDataReader() {
       DeviceEventEmitter.removeAllListeners('RNSerial:SERIAL_ACTION');
     };
   }, []);
-
-  console.log('data', data);
 
   //   return (<View>
   //       <Text>{data}</Text>
