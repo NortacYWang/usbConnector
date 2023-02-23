@@ -1,9 +1,11 @@
 package com.nortactactical;
 
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
 import android.os.CountDownTimer;
+import android.app.PendingIntent;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,11 +36,13 @@ public class SerialPortModule extends ReactContextBaseJavaModule {
     private final int READ_BYTE_LEN = 1024; 
     private UsbSerialPort usbSerialPort;
     private boolean connected = false;
+    private static String ACTION_USB_PERMISSION = "com.nortactactical.USB_PERMISSION";
 
     public SerialPortModule(ReactApplicationContext reactContext) {
         super(reactContext);
 
     }
+
 
     @ReactMethod
     public void connect(Integer baudRate, Integer dataBits, Integer stopBits, Integer parity, Promise promise) {
@@ -51,6 +55,8 @@ public class SerialPortModule extends ReactContextBaseJavaModule {
         UsbDeviceConnection connection = usbManager.openDevice(firstDriver.getDevice());
         if (connection == null) {
             promise.resolve(SerialResponseCodeConstant.CONNECT_FAILED);
+             PendingIntent mPendingIntent = PendingIntent.getBroadcast(getReactApplicationContext(), 0, new Intent(ACTION_USB_PERMISSION), 0);
+             usbManager.requestPermission(firstDriver.getDevice(), mPendingIntent);
             return;
         }
         this.usbSerialPort = firstDriver.getPorts().get(0);
@@ -101,7 +107,8 @@ public class SerialPortModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void hasDevice(Promise promise) {
-        promise.resolve(hasSerialDevice());
+        // promise.resolve(hasSerialDevice());
+        promise.resolve(getFirstSerialDevice().getDevice().toString());
     }
 
     public boolean hasSerialDevice() {
