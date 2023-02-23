@@ -107,8 +107,8 @@ public class SerialPortModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void hasDevice(Promise promise) {
-        promise.resolve(hasSerialDevice());
-        // promise.resolve(getFirstSerialDevice().getDevice().toString());
+        // promise.resolve(hasSerialDevice());
+        promise.resolve(getFirstSerialDevice().getDevice().toString());
     }
 
     public boolean hasSerialDevice() {
@@ -146,7 +146,7 @@ public class SerialPortModule extends ReactContextBaseJavaModule {
         }
         byte[] dataBytes;
         try {
-            dataBytes = Hex.decodeHex(data.toCharArray());
+            dataBytes = data.getBytes();
         } catch (Exception e) {
             promise.resolve(SerialResponseCodeConstant.PARSE_HEX_FAILED);
             return;
@@ -169,8 +169,10 @@ public class SerialPortModule extends ReactContextBaseJavaModule {
                 try {
                     
                     len = usbSerialPort.read(bytes, READ_TIME_OUT_MILLS);
+                     promise.resolve(len);
                 } catch (IOException e) {
                     e.printStackTrace();
+                    promise.resolve("read fails");
                 }
                 if (len > 0) {
                     hex.append(Hex.encodeHexString(Arrays.copyOf(bytes, len)));
