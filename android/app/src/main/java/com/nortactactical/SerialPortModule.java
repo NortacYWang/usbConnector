@@ -107,8 +107,8 @@ public class SerialPortModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void hasDevice(Promise promise) {
-        // promise.resolve(hasSerialDevice());
-        promise.resolve(getFirstSerialDevice().getDevice().toString());
+        promise.resolve(hasSerialDevice());
+        // promise.resolve(getFirstSerialDevice().getDevice().toString());
     }
 
     public boolean hasSerialDevice() {
